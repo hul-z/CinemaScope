@@ -1,0 +1,24 @@
+-- 1.top_10<-dbGetQuery(con, "
+SELECT TOP 10 Series_Title, IMDB_Rating 
+FROM imdb_top_1000 
+ORDER BY IMDB_Rating DESC, No_of_Votes DESC
+")
+ 
+install.packages("ggplot2")
+library(ggplot2)
+
+ggplot(top_10, aes(x = reorder(Series_Title, -IMDB_Rating), y = IMDB_Rating, group = 1)) +
+  geom_line(color = "#540808", size = 1.2) +
+  geom_point(color = "#E7E0CB", size = 3) +
+  labs(title = "Top 10 IMDB Rated Movies - Line Chart",
+       x = "Movie", y = "IMDB Rating") +
+  theme_minimal(base_family = "lato") +
+  theme(
+    axis.text.x = element_text(angle = 60, hjust = 1, size = 13),
+    plot.title = element_text(size = 16, face = "bold", color = "#540808"),
+    axis.title = element_text(size = 13),
+    axis.text.y = element_text(size = 11)
+  )
+
+dir.create("plots")
+ggsave("plots/top_10_movies.png", width = 10, height = 6)
