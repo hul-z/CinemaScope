@@ -7,18 +7,22 @@ ORDER BY IMDB_Rating DESC, No_of_Votes DESC
 install.packages("ggplot2")
 library(ggplot2)
 
-ggplot(top_10, aes(x = reorder(Series_Title, -IMDB_Rating), y = IMDB_Rating, group = 1)) +
-  geom_line(color = "#540808", size = 1.2) +
-  geom_point(color = "#E7E0CB", size = 3) +
-  labs(title = "Top 10 IMDB Rated Movies - Line Chart",
-       x = "Movie", y = "IMDB Rating") +
+ggplot(top_10, aes(x = reorder(Series_Title, IMDB_Rating), y = IMDB_Rating)) +
+  geom_col(fill = "#540808", width = 0.7) +
+  geom_text(aes(label = IMDB_Rating), hjust = -0.1, size = 4.5, color = "#333333", fontface = "bold") +
+  coord_flip() +
+  labs(title = "Top 10 IMDB Rated Movies",
+       subtitle = "Based on IMDB Ratings and Votes",
+       x = "", y = "IMDB Rating") +
   theme_minimal(base_family = "lato") +
   theme(
-    axis.text.x = element_text(angle = 60, hjust = 1, size = 13),
-    plot.title = element_text(size = 16, face = "bold", color = "#540808"),
-    axis.title = element_text(size = 13),
-    axis.text.y = element_text(size = 11)
-  )
+    plot.background = element_rect(fill = "#F8F4E3", color = NA),
+    panel.grid.major.y = element_blank(),
+    panel.grid.minor = element_blank(),
+    plot.title = element_text(size = 18, face = "bold", color = "#540808"),
+    plot.subtitle = element_text(size = 13, color = "#6e6e6e"),
+    axis.text = element_text(size = 12),
+    axis.title.y = element_blank()
+  ) +
+  scale_y_continuous(limits = c(0, 10), breaks = seq(0, 10, 1))
 
-dir.create("plots")
-ggsave("plots/top_10_movies.png", width = 10, height = 6)
